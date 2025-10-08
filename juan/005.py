@@ -1,5 +1,5 @@
 
-familia = ["lourival", "regiane", "lohane", "juan", "heitor e hiago"]
+familia = ["lourival", "regiane", "lohane", "juan", "heitor", "hiago", "ana"]
 
 
 familia_ordenada = sorted(familia)
