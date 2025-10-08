@@ -8,3 +8,8 @@
 * Idoso acima de 60 anos.
   
  ## 3. Faça um programa que solicite ao usuário 2 valores, utilize uma condição ternária para escrever qual o maior valor: o primeiro ou o segundo (caso os valores sejam iguais, considere o segundo).*
+ 
+ ## 4. Faça um programa que solicite o nome do usuário e depois disso faça uma saudação no formato: "Olá {nome digitado pelo usuário}"*.
+ 
+ ## 5. Faça um programa que inicialize uma lista com o nome das pessoas da sua família, depois exiba os nomes em ordem alfabética.
+ * Exemplo -> [ Nome do pai, nome da mãe, nome do irmão]
