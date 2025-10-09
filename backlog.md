@@ -13,3 +13,5 @@
  
  ## 5. Faça um programa que inicialize uma lista com o nome das pessoas da sua família, depois exiba os nomes em ordem alfabética.
  * Exemplo -> [ Nome do pai, nome da mãe, nome do irmão]
+ 
+ ## 6. Faça um programa que solicite uma mensagem qualquer para o usuário e exiba essa mensagem com todas as letras em maiúsculo. 
