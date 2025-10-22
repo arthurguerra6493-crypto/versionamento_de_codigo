@@ -15,3 +15,6 @@
  * Exemplo -> [ Nome do pai, nome da mãe, nome do irmão]
  
  ## 6. Faça um programa que solicite uma mensagem qualquer para o usuário e exiba essa mensagem com todas as letras em maiúsculo. 
+
+ ## 7. faca um programa que solicite ao usuario 3 nomes de cidades, um por vez, cada vez que o usuario digitar o nome, o programa deve incluir este nome na lista de cidades e depois imprimir mostrando a lista atualizada.
+ *lista_cidades [belo horizonte] ---> lista atualizada [belo horizonte , ribeirao das neves]
