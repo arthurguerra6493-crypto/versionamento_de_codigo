@@ -1,9 +1,5 @@
-for _ in range(3):
-    
-    nome_cidade = input("Digite o nome de uma cidade: ")
-    
-    cidades.append(nome_cidade)
-    
-    print(f"Lista atualizada: {cidades}")
-
-print(f"\nLista final de cidades: {cidades}")
+liasta_cidades = []
+for i in range (3):
+    cidade = input(f"digite o nome da {i + 1}ª cidade: ")
+    lista_cidades.append(cidade)
+    print(f"lista atualizada: {lista_cidades}")
