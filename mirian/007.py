@@ -1,6 +1,11 @@
-lista_cidades = ["belo horizonte"]
+lista_cidades = []
 
-print(f"lista inicial: {lista_cidades}")
+while True:
+  nome = input(" Digite o nome da cidade (ou digite 'sair' para encerrar):")
+  if nome.lower() == 'sair':
+       break 
+  cidades.append(nome)
+  print("lista atualizada de cidades") , cidadesS)
 
-for i in range(3):
-    nova_cidade = input 
+  print("")
+
