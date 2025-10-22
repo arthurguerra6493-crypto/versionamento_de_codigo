@@ -17,7 +17,7 @@ while True:
         cidades.append(nome_cidade)
 
 
-print("\nCidades digitadas:")
+print("\nLista de cidades :")
 for cidade in cidades:
     print(f"- {cidade}")
 
