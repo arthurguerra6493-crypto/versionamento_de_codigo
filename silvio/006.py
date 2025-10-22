@@ -1,4 +1,4 @@
 mensagem = (input("digite uma mensagem qualquer: "))
-mensagem_maiuscula = mensagem.upper()
+mensagem_maiscula = mensagem.upper()
 
 print("mensagem em maisculas: ", mensagem_maiuscula)
