@@ -15,4 +15,6 @@
 
  ## 7. Faça um progrma que solicite ao usuário 3 nomes de cidades, um por vez, cada vez que o usuário digitar o nome, o programa deve incluir este nome na lista de cidades e depois imprimir mostrando a lista atualizada.
  * Lista_cidades [ Belo Horizonte] ---> lista atualizada [ Belo Horizonte, Ribeirão das neves]
-
+ * Altere o programa para que possa incluir qualquer numero de cidades e para que o programa finalize o usuário digite ( SAIR ).
+ ## 8. Faça um programa que tenha uma lista de frutas vasia, depois peça ao usuário para digitar os nome das frutras **" Laranja, Banana, Limão, Pera, Uva "** e coloque seguindo o exemplo na ordem definida
+ * [ 1º laranja, 2° limão, 3° banana, 4° pera, 5° uva]
