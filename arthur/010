@@ -1,0 +1,26 @@
+numbers = [2, 4, 6, 7, 0, 8]
+
+print("lista de números:", numbers)
+
+user_input = input("digite um número que esteja na lista: ").strip()
+
+
+try:
+    if "." in user_input or "e" in user_input.lower():
+        value = float(user_input)
+    else:
+        value = int(user_input)
+except ValueError:
+    try:
+        value = float(user_input)
+    except ValueError:
+        print("isso nao é um número valido.")
+        raise SystemExit(1)
+
+
+found = any(n == value for n in numbers)
+
+if found:
+    print(f"{value} o número está na lista.")
+else:
+    print(f"{value} o número não está na lista.")
