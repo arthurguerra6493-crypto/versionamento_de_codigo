@@ -18,3 +18,6 @@
  * Altere o programa para que possa incluir qualquer numero de cidades e para que o programa finalize o usuário digite ( SAIR ).
  ## 8. Faça um programa que tenha uma lista de frutas vasia, depois peça ao usuário para digitar os nome das frutras **" Laranja, Banana, Limão, Pera, Uva "** e coloque seguindo o exemplo na ordem definida
  * [ 1º laranja, 2° limão, 3° banana, 4° pera, 5° uva]
+ ## 9. Faça um programa que solicite o nome  completo do usuário, e exiba apenas o seu segundo nome, ou seja ( sobrenome ).
+ * Exemplo [ JOANATAS FERNANDES ]  -> print(" FERNANDES " )
+ ## 10. Faça um programa que inicialize uma lista com vários numeros diferentes, depois disso solicite ao usuário um número, verifique se o número está ou não na lista e exiba uma mensagem notificando o usuário de resultado.
