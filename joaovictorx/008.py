@@ -1,23 +1,21 @@
 
-cidades = []
-
-print("Digite os nomes das cidades ou digite 'sair' para encerrar:")
+lista_frutas = []
 
 
-while True:
+frutas_a_digitar = ["Laranja", "Banana", "Limão", "Pera", "Uva"]
+
+
+print("Por favor, digite as seguintes frutas na ordem:")
+for fruta in frutas_a_digitar:
+    entrada_usuario = input(f"Digite '{fruta}': ")
    
-    nome_cidade = input("Digite o nome da cidade: ")
-    
-   
-    if nome_cidade.lower() == 'sair':
-        print("Programa Encerrado..........")
-        break
+    if entrada_usuario.strip().capitalize() == fruta:
+        lista_frutas.append(entrada_usuario.strip().capitalize())
+        print(f"'{entrada_usuario.strip().capitalize()}' adicionada.")
     else:
-      
-        cidades.append(nome_cidade)
+        print(f"Entrada inválida. A fruta esperada era '{fruta}'. A lista será criada com a fruta correta.")
+        lista_frutas.append(fruta)
 
 
-print("\nCidades digitadas:")
-for cidade in cidades:
-    print(f"- {cidade}")
-
+print("\nLista de frutas final:")
+print(lista_frutas)
