@@ -21,3 +21,12 @@
  ## 9. Faça um programa que solicite o nome  completo do usuário, e exiba apenas o seu segundo nome, ou seja ( sobrenome ).
  * Exemplo [ JOANATAS FERNANDES ]  -> print(" FERNANDES " )
  ## 10. Faça um programa que inicialize uma lista com vários numeros diferentes, depois disso solicite ao usuário um número, verifique se o número está ou não na lista e exiba uma mensagem notificando o usuário de resultado.
+  ## 11 Faça um programa que simule um sistema de estacionamento, onde o usuário deve digitar a placa do carro, incluir a hora e data que deu entrada e calcular o valor de permanencia do carro sendo que a hora custa R$ 12.00, a fração de 15 minutos custa R$ 3.00 e a diaria custa R$ 60.00, o progrma deve imprimir o ticket com o tempo de permanência, data, hora e valor total por placa. O veiculo deve ser inserido manualmente. 
+
+ # Trabalho Final.
+ #### Um joven estudante precisa ajudar sua mãe com a venda de marmitex, porém a dificuldade de controle dos isumos é muito grande. Ela precisa de saber quantas marmitas ela poderá fazer e a quantidade de isumos que tem no estoque. Siga a tabela de quantidade de isumos para cada marmita e ajude a pobre senhora a controlar seus gastos com um sitema que mostre a quantidade de insumo que tem de cada coisa, quantas marmitas da para fazer com cada insumo 
+ * Arros 100 GR para cada marmita
+ * Feijão 50 GR para cada marmita
+ * Carne 25 GR para cada marmita
+ * Salada 10 GR para cada marmita.
+ * * Você deve caulcular apartir de cada venda de marmita, diminuir no estoque de cada insumo e imprimir quando a marmita foi feita com succeso. 
