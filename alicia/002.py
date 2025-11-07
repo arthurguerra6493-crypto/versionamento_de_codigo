@@ -17,3 +17,4 @@ if idade >= 41 and idade <= 59:
 
 if idade >= 60:
     print("classificação: idoso")
+    
