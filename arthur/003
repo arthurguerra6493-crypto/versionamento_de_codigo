@@ -1,0 +1,9 @@
+num1 = int(input("digite o primeiro número: "))
+num2 = int(input("digite o segundo número:"))
+
+if num1 > num2:
+print("o primeiro número é maior")
+if num2 > num1:
+print("o segundo número é maior")
+if num1 == num2:
+print("os dois são iguais")
