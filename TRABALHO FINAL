@@ -1,0 +1,167 @@
+# === SISTEMA DE CONTROLE DE MARMITEX ===
+INSUMOS_POR_MARMITA = {
+    "arroz": 150,
+    "arroz_carreteiro": 175,
+    "feijao": 450,
+    "carne_boi": 125,
+    "carne_porco": 125,
+    "frango": 125,
+    "peixe": 125,
+    "salada": 200,
+    "batata_frita": 300
+}
+
+
+estoque = {
+    "arroz": 250000,
+    "arroz_carreteiro": 110000,
+    "feijao": 300000,
+    "carne_boi": 150000,
+    "carne_porco": 400000,
+    "frango": 600000,
+    "peixe": 30000,
+    "salada": 300000,
+    "batata_frita": 500000
+}
+
+
+bebidas = {
+    "refri": 10,
+    "agua_com_gas": 10,
+    "suco": 10
+}
+
+
+sobremesas = {
+    "torta_de_limao": 5,
+    "pudim": 5,
+    "brownie": 5
+}
+
+def mostrar_estoque():
+    """Mostra o estoque atual de insumos, bebidas e sobremesas."""
+    print("\nESTOQUE ATUAL DE INSUMOS:")
+    for item, qtd in estoque.items():
+        print(f" - {item.replace('_', ' ').capitalize()}: {qtd}g")
+
+    print("\nESTOQUE DE BEBIDAS:")
+    for b, qtd in bebidas.items():
+        print(f" - {b.replace('_', ' ').capitalize()}: {qtd} unidades")
+
+    print("\nESTOQUE DE SOBREMESAS:")
+    for s, qtd in sobremesas.items():
+        print(f" - {s.replace('_', ' ').capitalize()}: {qtd} unidades")
+
+def calcular_quantidade_por_tamanho(base, tamanho):
+    """Ajusta a quantidade conforme o tamanho da marmita."""
+    if tamanho == "P":
+        return base / 2
+    elif tamanho == "G":
+        return base * 2
+    else:  # M (média)
+        return base
+
+def vender_marmita(qtd, tamanho, tipo_arroz, tipo_carne, bebida=None, sobremesa=None):
+    """Realiza a venda de marmitas considerando o tamanho."""
+   
+    if tipo_arroz not in ["arroz", "arroz_carreteiro"]:
+        print("Tipo de arroz inválido.")
+        return
+
+    
+    if tipo_carne not in ["carne_boi", "carne_porco", "frango", "peixe"]:
+        print("Tipo de carne inválido.")
+        return
+
+   
+    itens_necessarios = ["feijao", tipo_carne, "salada", "batata_frita", tipo_arroz]
+
+    for item in itens_necessarios:
+        qtd_necessaria = calcular_quantidade_por_tamanho(INSUMOS_POR_MARMITA[item], tamanho) * qtd
+        if estoque[item] < qtd_necessaria:
+            print(f"Estoque insuficiente de {item.replace('_',' ')} para {qtd} marmita(s) {tamanho}.")
+            return
+
+    
+    if bebida:
+        if bebida not in bebidas:
+            print("Tipo de bebida inválido.")
+            return
+        if bebidas[bebida] < qtd:
+            print(f"Não há bebidas suficientes ({bebidas[bebida]} disponíveis).")
+            return
+
+    
+    if sobremesa:
+        if sobremesa not in sobremesas:
+            print("Tipo de sobremesa inválido.")
+            return
+        if sobremesas[sobremesa] < qtd:
+            print(f"Não há sobremesas suficientes ({sobremesas[sobremesa]} disponíveis).")
+            return
+
+    
+    for item in itens_necessarios:
+        qtd_usada = calcular_quantidade_por_tamanho(INSUMOS_POR_MARMITA[item], tamanho) * qtd
+        estoque[item] -= qtd_usada
+
+    
+    if bebida:
+        bebidas[bebida] -= qtd
+    if sobremesa:
+        sobremesas[sobremesa] -= qtd
+
+    print(f"\n {qtd} marmita(s) {tamanho} feita(s) com sucesso!")
+    print(f" - Arroz: {tipo_arroz.replace('_', ' ')}")
+    print(f" - Carne: {tipo_carne.replace('_', ' ')}")
+    if bebida:
+        print(f" - Bebida: {bebida.replace('_', ' ')}")
+    if sobremesa:
+        print(f" - Sobremesa: {sobremesa.replace('_', ' ')}")
+
+    mostrar_estoque()
+
+
+
+print("=== SISTEMA DE CONTROLE DE MARMITEX ===")
+mostrar_estoque()
+
+while True:
+    opcao = input("\nDeseja vender uma marmita? (S/N): ").strip().upper()
+    if opcao == "N":
+        print("Encerrando o sistema. Até logo!")
+        break
+    elif opcao == "S":
+        try:
+            qtd = int(input("Quantas marmitas deseja vender? "))
+            tamanho = input("Tamanho (P - pequena / M - média / G - grande): ").strip().upper()
+            if tamanho not in ["P", "M", "G"]:
+                print("Tamanho inválido! Use P, M ou G.")
+                continue
+
+            tipo_arroz = input("Tipo de arroz (1 - comum / 2 - carreteiro): ").strip()
+            tipo_arroz = "arroz_carreteiro" if tipo_arroz == "2" else "arroz"
+
+            print("Tipos de carne: 1 - Boi | 2 - Porco | 3 - Frango | 4 - Peixe")
+            escolha_carne = input("Escolha o tipo de carne: ").strip()
+            carnes_opcoes = {"1": "carne_boi", "2": "carne_porco", "3": "frango", "4": "peixe"}
+            tipo_carne = carnes_opcoes.get(escolha_carne, "carne_boi")
+
+            add_bebida = input("Deseja adicionar bebida? (S/N): ").strip().upper()
+            bebida_escolhida = None
+            if add_bebida == "S":
+                print("Opções: refri / agua_com_gas / suco")
+                bebida_escolhida = input("Digite a bebida: ").strip().lower().replace(" ", "_")
+
+            add_sobremesa = input("Deseja adicionar sobremesa? (S/N): ").strip().upper()
+            sobremesa_escolhida = None
+            if add_sobremesa == "S":
+                print("Opções: torta_de_limao / pudim / brownie")
+                sobremesa_escolhida = input("Digite a sobremesa: ").strip().lower().replace(" ", "_")
+
+            vender_marmita(qtd, tamanho, tipo_arroz, tipo_carne, bebida_escolhida, sobremesa_escolhida)
+
+        except ValueError:
+            print(" Digite um número válido para a quantidade de marmitas!")
+    else:
+        print("Opção inválida! Digite S ou N.")
