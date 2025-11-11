@@ -26,9 +26,9 @@ estoque = {
 
 
 bebidas = {
-    "refri": 10,
-    "agua_com_gas": 10,
-    "suco": 10
+    "refri": 1000,
+    "agua_com_gas": 1000,
+    "suco": 1000
 }
 
 
