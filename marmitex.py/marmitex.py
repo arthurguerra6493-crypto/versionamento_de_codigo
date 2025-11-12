@@ -144,9 +144,9 @@ def mostrar_relatorio():
 root = tk.Tk()
 root.title("🍱 Sistema de Marmitex")
 root.geometry("1000x1000")
-root.configure(bg="#f0f0f0")
+root.configure(bg="#30ee17")
 
-frame_menu = tk.Frame(root, bg="#ffcc99")
+frame_menu = tk.Frame(root, bg="#1132f0")
 frame_venda = tk.Frame(root, bg="#ccffcc")
 frame_estoque = tk.Frame(root, bg="#99ccff")
 frame_relatorio = tk.Frame(root, bg="#ff9999")
