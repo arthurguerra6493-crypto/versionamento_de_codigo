@@ -1,213 +1,219 @@
 import tkinter as tk
-from tkinter import messagebox
+from tkinter import ttk, messagebox
 
-# --- CONFIGURAÇÕES DE INSUMOS ---
+# ==========================
+# DADOS INICIAIS
+# ==========================
+estoque_insumos = {"Arroz": 2000, "Feijão": 1000, "Carne": 1000, "Salada": 500}
+estoque_bebidas = {"Coca-Cola": 10, "Guaraná": 10, "Suco": 10, "Água com gás": 10}
+estoque_sobremesas = {"Pudim": 10, "Brownie": 10, "Bolo no pote": 10}
 
-# Quantidades de insumos (em gramas) para cada tamanho de marmita
-INSUMOS_POR_TAMANHO = {
-    "P": {"Arroz": 100, "Feijão": 50, "Carne": 25, "Salada": 10},
-    "M": {"Arroz": 150, "Feijão": 75, "Carne": 40, "Salada": 15},
-    "G": {"Arroz": 200, "Feijão": 100, "Carne": 60, "Salada": 20},
-}
+preco_marmita = {"P": 10.0, "M": 13.0, "G": 16.0}
+preco_bebidas = {"Coca-Cola": 5.0, "Guaraná": 4.5, "Suco": 4.0, "Água com gás": 3.0}
+preco_sobremesas = {"Pudim": 4.0, "Brownie": 5.0, "Bolo no pote": 6.0}
 
-# Estoque inicial (em gramas ou unidades)
-estoque = {
-    "Arroz": 5000,
-    "Feijão": 2500,
-    "Carne": 1500,
-    "Salada": 800,
-    "Bebida": 30,        # unidades
-    "Sobremesa": 20      # unidades
-}
+custo_insumos = {"Arroz": 0.02, "Feijão": 0.03, "Carne": 0.10, "Salada": 0.04}
+consumo_marmita = {"Arroz": 100, "Feijão": 50, "Carne": 25, "Salada": 10}
+vendas_realizadas = []
 
-# Controle de vendas e consumo
-total_vendas = {"P": 0, "M": 0, "G": 0}
-vendas_bebida = 0
-vendas_sobremesa = 0
-insumos_usados = {item: 0 for item in estoque}
+# ==========================
+# FUNÇÕES PRINCIPAIS
+# ==========================
+def calcular_custo_marmita(tamanho):
+    multiplicador = {"P": 1, "M": 1.5, "G": 2}
+    custo = 0
+    for insumo, gramas in consumo_marmita.items():
+        custo += (gramas * multiplicador[tamanho] / 100) * custo_insumos[insumo]
+    return round(custo, 2)
 
+def verificar_estoque_marmita(tamanho):
+    multiplicador = {"P": 1, "M": 1.5, "G": 2}
+    for insumo, gramas in consumo_marmita.items():
+        if estoque_insumos[insumo] < gramas * multiplicador[tamanho]:
+            return False
+    return True
 
-# --- FUNÇÕES PRINCIPAIS ---
+def atualizar_estoque_marmita(tamanho):
+    multiplicador = {"P": 1, "M": 1.5, "G": 2}
+    for insumo, gramas in consumo_marmita.items():
+        estoque_insumos[insumo] -= gramas * multiplicador[tamanho]
 
-def calcular_marmitas_possiveis(tamanho):
-    """Calcula quantas marmitas de determinado tamanho podem ser feitas"""
-    quantidades = []
-    for item in INSUMOS_POR_TAMANHO[tamanho]:
-        por_marmita = INSUMOS_POR_TAMANHO[tamanho][item]
-        quantidades.append(estoque[item] // por_marmita)
-    return min(quantidades)
+def atualizar_estoque_bebida(bebida):
+    estoque_bebidas[bebida] -= 1
 
+def atualizar_estoque_sobremesa(sobremesa):
+    estoque_sobremesas[sobremesa] -= 1
 
-def atualizar_interface():
-    """Atualiza os textos de estoque e relatório"""
-    texto_estoque = "📦 ESTOQUE ATUAL:\n"
-    for item, qtd in estoque.items():
-        unidade = "g" if item not in ["Bebida", "Sobremesa"] else "unid."
-        texto_estoque += f" - {item}: {qtd} {unidade}\n"
-    label_estoque.config(text=texto_estoque)
+def fazer_venda():
+    tamanho = combo_marmita.get()
+    bebida = combo_bebidas.get()
+    sobremesa = combo_sobremesas.get()
 
-    texto_marmitas = (
-        f"👉 Marmitas possíveis: "
-        f"P={calcular_marmitas_possiveis('P')}, "
-        f"M={calcular_marmitas_possiveis('M')}, "
-        f"G={calcular_marmitas_possiveis('G')}"
-    )
-    label_marmitas.config(text=texto_marmitas)
-
-    total_geral = sum(total_vendas.values())
-    texto_relatorio = (
-        f"📊 RELATÓRIO DE PRODUÇÃO\n"
-        f"🍱 Marmitas vendidas: {total_geral} (P={total_vendas['P']}, M={total_vendas['M']}, G={total_vendas['G']})\n"
-        f"🥤 Bebidas vendidas: {vendas_bebida}\n"
-        f"🍰 Sobremesas vendidas: {vendas_sobremesa}\n\n"
-        f"Insumos usados:\n"
-    )
-    for item, qtd in insumos_usados.items():
-        unidade = "g" if item not in ["Bebida", "Sobremesa"] else "unid."
-        texto_relatorio += f" - {item}: {qtd} {unidade}\n"
-
-    label_relatorio.config(text=texto_relatorio)
-
-
-def vender_marmita():
-    """Registra a venda de marmita com opcional de bebida e sobremesa"""
-    global vendas_bebida, vendas_sobremesa
-
-    tamanho = var_tamanho.get()
-    incluir_bebida = var_bebida.get()
-    incluir_sobremesa = var_sobremesa.get()
-
-    if tamanho not in INSUMOS_POR_TAMANHO:
-        messagebox.showwarning("Erro", "Selecione um tamanho de marmita (P, M ou G).")
+    if not tamanho or not bebida or not sobremesa:
+        messagebox.showerror("Erro", "Selecione todos os itens da venda!")
         return
 
-    marmitas_possiveis = calcular_marmitas_possiveis(tamanho)
-    if marmitas_possiveis <= 0:
-        messagebox.showwarning("Estoque insuficiente", f"Não há insumos suficientes para marmitas {tamanho}.")
+    if not verificar_estoque_marmita(tamanho):
+        messagebox.showwarning("Atenção", "Estoque de insumos insuficiente!")
+        return
+    if estoque_bebidas[bebida] <= 0:
+        messagebox.showwarning("Atenção", f"Estoque de {bebida} insuficiente!")
+        return
+    if estoque_sobremesas[sobremesa] <= 0:
+        messagebox.showwarning("Atenção", f"Estoque de {sobremesa} insuficiente!")
         return
 
-    if incluir_bebida and estoque["Bebida"] <= 0:
-        messagebox.showwarning("Estoque insuficiente", "Sem bebidas disponíveis no estoque.")
+    atualizar_estoque_marmita(tamanho)
+    atualizar_estoque_bebida(bebida)
+    atualizar_estoque_sobremesa(sobremesa)
+
+    valor_venda = preco_marmita[tamanho] + preco_bebidas[bebida] + preco_sobremesas[sobremesa]
+    custo = calcular_custo_marmita(tamanho)
+    lucro = round(valor_venda - custo, 2)
+
+    vendas_realizadas.append({
+        "Marmita": tamanho,
+        "Bebida": bebida,
+        "Sobremesa": sobremesa,
+        "Valor": valor_venda,
+        "Custo": custo,
+        "Lucro": lucro
+    })
+
+    messagebox.showinfo("Venda Realizada", f"Marmita vendida!\nTotal: R$ {valor_venda:.2f}\nLucro: R$ {lucro:.2f}")
+
+def mostrar_estoque():
+    texto = "=== Estoque de Insumos ===\n"
+    for insumo, qtd in estoque_insumos.items():
+        texto += f"{insumo}: {qtd}g\n"
+    texto += "\n=== Estoque de Bebidas ===\n"
+    for bebida, qtd in estoque_bebidas.items():
+        texto += f"{bebida}: {qtd} unidades\n"
+    texto += "\n=== Estoque de Sobremesas ===\n"
+    for sobremesa, qtd in estoque_sobremesas.items():
+        texto += f"{sobremesa}: {qtd} unidades\n"
+    text_estoque.delete(1.0, tk.END)
+    text_estoque.insert(tk.END, texto)
+
+def repor_estoque():
+    item = entry_item.get()
+    try:
+        quantidade = float(entry_qtd.get())
+    except:
+        messagebox.showerror("Erro", "Digite uma quantidade válida!")
         return
 
-    if incluir_sobremesa and estoque["Sobremesa"] <= 0:
-        messagebox.showwarning("Estoque insuficiente", "Sem sobremesas disponíveis no estoque.")
+    if item in estoque_insumos:
+        estoque_insumos[item] += quantidade
+    elif item in estoque_bebidas:
+        estoque_bebidas[item] += int(quantidade)
+    elif item in estoque_sobremesas:
+        estoque_sobremesas[item] += int(quantidade)
+    else:
+        messagebox.showerror("Erro", "Item não encontrado!")
         return
 
-    # Diminui insumos da marmita
-    for item in INSUMOS_POR_TAMANHO[tamanho]:
-        gasto = INSUMOS_POR_TAMANHO[tamanho][item]
-        estoque[item] -= gasto
-        insumos_usados[item] += gasto
+    messagebox.showinfo("Sucesso", f"{item} reabastecido!")
+    entry_item.delete(0, tk.END)
+    entry_qtd.delete(0, tk.END)
+    mostrar_estoque()
 
-    total_vendas[tamanho] += 1
+def mostrar_relatorio():
+    total_vendas = sum(v["Valor"] for v in vendas_realizadas)
+    total_custo = sum(v["Custo"] for v in vendas_realizadas)
+    total_lucro = round(total_vendas - total_custo, 2)
 
-    # Se houver bebida e/ou sobremesa
-    if incluir_bebida:
-        estoque["Bebida"] -= 1
-        insumos_usados["Bebida"] += 1
-        vendas_bebida += 1
+    texto = f"=== Relatório de Vendas ===\n"
+    texto += f"Vendas realizadas: {len(vendas_realizadas)}\n"
+    texto += f"Faturamento total: R$ {total_vendas:.2f}\n"
+    texto += f"Custo total dos insumos: R$ {total_custo:.2f}\n"
+    texto += f"Lucro líquido: R$ {total_lucro:.2f}\n\n"
+    texto += "Detalhes das vendas:\n"
+    for v in vendas_realizadas:
+        texto += f"Marmita: {v['Marmita']}, Bebida: {v['Bebida']}, Sobremesa: {v['Sobremesa']}, Valor: R$ {v['Valor']:.2f}, Lucro: R$ {v['Lucro']:.2f}\n"
 
-    if incluir_sobremesa:
-        estoque["Sobremesa"] -= 1
-        insumos_usados["Sobremesa"] += 1
-        vendas_sobremesa += 1
+    text_relatorio.delete(1.0, tk.END)
+    text_relatorio.insert(tk.END, texto)
 
-    atualizar_interface()
-    msg = f"✅ Marmita {tamanho} feita com sucesso!"
-    if incluir_bebida:
-        msg += "\n+ Bebida incluída."
-    if incluir_sobremesa:
-        msg += "\n+ Sobremesa incluída."
-    messagebox.showinfo("Venda registrada", msg)
+    with open("relatorio_vendas.txt", "w") as file:
+        file.write(texto)
 
+# ==========================
+# INTERFACE GRÁFICA
+# ==========================
+root = tk.Tk()
+root.title("🍱 Sistema de Marmitex")
+root.geometry("1000x1000")
+root.configure(bg="#f0f0f0")
 
-def repor_insumo():
-    """Permite repor insumos, bebidas ou sobremesas"""
-    insumo = entry_insumo.get().capitalize()
-    quantidade = entry_quantidade.get()
+frame_menu = tk.Frame(root, bg="#ffcc99")
+frame_venda = tk.Frame(root, bg="#ccffcc")
+frame_estoque = tk.Frame(root, bg="#99ccff")
+frame_relatorio = tk.Frame(root, bg="#ff9999")
 
-    if insumo not in estoque:
-        messagebox.showerror("Erro", "Esse item não existe! Use: Arroz, Feijão, Carne, Salada, Bebida ou Sobremesa.")
-        return
+for frame in (frame_menu, frame_venda, frame_estoque, frame_relatorio):
+    frame.grid(row=0, column=0, sticky='nsew')
 
-    if not quantidade.isdigit():
-        messagebox.showerror("Erro", "Digite uma quantidade válida (apenas números).")
-        return
+def mostrar_frame(frame):
+    frame.tkraise()
 
-    quantidade = int(quantidade)
-    estoque[insumo] += quantidade
+# ==========================
+# MENU PRINCIPAL
+# ==========================
+tk.Label(frame_menu, text="🍴 Controle de Marmitex", font=("Arial", 28, "bold"), bg="#ffcc99").pack(pady=30)
+tk.Button(frame_menu, text="🛒 Fazer Venda", font=("Arial", 16), width=20, bg="#99ff99",
+          command=lambda: mostrar_frame(frame_venda)).pack(pady=15)
+tk.Button(frame_menu, text="📦 Estoque / Reposição", font=("Arial", 16), width=20, bg="#99ccff",
+          command=lambda: [mostrar_frame(frame_estoque), mostrar_estoque()]).pack(pady=15)
+tk.Button(frame_menu, text="💰 Relatório / Lucro", font=("Arial", 16), width=20, bg="#ff9999",
+          command=lambda: [mostrar_frame(frame_relatorio), mostrar_relatorio()]).pack(pady=15)
+tk.Button(frame_menu, text="❌ Sair", font=("Arial", 16), width=20, bg="#cccccc", command=root.quit).pack(pady=15)
 
-    entry_insumo.delete(0, tk.END)
-    entry_quantidade.delete(0, tk.END)
+# ==========================
+# TELA DE VENDAS
+# ==========================
+tk.Label(frame_venda, text="🛒 Realizar Venda", font=("Arial", 22, "bold"), bg="#ccffcc").pack(pady=15)
+tk.Label(frame_venda, text="Tamanho da Marmita:", font=("Arial", 14), bg="#ccffcc").pack()
+combo_marmita = ttk.Combobox(frame_venda, values=["P", "M", "G"], state="readonly", font=("Arial", 12))
+combo_marmita.pack(pady=5)
 
-    atualizar_interface()
-    messagebox.showinfo("Reposição", f"✅ {quantidade} adicionados ao estoque de {insumo}.")
+tk.Label(frame_venda, text="Bebida:", font=("Arial", 14), bg="#ccffcc").pack()
+combo_bebidas = ttk.Combobox(frame_venda, values=list(estoque_bebidas.keys()), state="readonly", font=("Arial", 12))
+combo_bebidas.pack(pady=5)
 
+tk.Label(frame_venda, text="Sobremesa:", font=("Arial", 14), bg="#ccffcc").pack()
+combo_sobremesas = ttk.Combobox(frame_venda, values=list(estoque_sobremesas.keys()), state="readonly", font=("Arial", 12))
+combo_sobremesas.pack(pady=5)
 
-# --- INTERFACE GRÁFICA (SEM IMAGEM) ---
+tk.Button(frame_venda, text="💳 Finalizar Venda", font=("Arial", 14), bg="#66ff66", command=fazer_venda).pack(pady=15)
+tk.Button(frame_venda, text="⬅ Voltar ao Menu", font=("Arial", 14), bg="#cccccc", command=lambda: mostrar_frame(frame_menu)).pack(pady=10)
 
-janela = tk.Tk()
-janela.title("🍱 Controle de Marmitex + Bebidas + Sobremesas")
-janela.geometry("1000x900")
-janela.configure(bg="#f2f2f2")
+# ==========================
+# TELA DE ESTOQUE
+# ==========================
+tk.Label(frame_estoque, text="📦 Estoque e Reposição", font=("Arial", 22, "bold"), bg="#99ccff").pack(pady=10)
+text_estoque = tk.Text(frame_estoque, height=15, width=85, font=("Arial", 12))
+text_estoque.pack(pady=5)
 
-# Título
-titulo = tk.Label(janela, text="🍱 Sistema de Controle de Marmitex", font=("Arial", 22, "bold"), bg="#f2f2f2")
-titulo.pack(pady=10)
+tk.Label(frame_estoque, text="Item para repor:", font=("Arial", 14), bg="#99ccff").pack()
+entry_item = tk.Entry(frame_estoque, font=("Arial", 12))
+entry_item.pack(pady=2)
+tk.Label(frame_estoque, text="Quantidade:", font=("Arial", 14), bg="#99ccff").pack()
+entry_qtd = tk.Entry(frame_estoque, font=("Arial", 12))
+entry_qtd.pack(pady=2)
+tk.Button(frame_estoque, text="Repor Estoque", font=("Arial", 14), bg="#66ccff", command=repor_estoque).pack(pady=5)
+tk.Button(frame_estoque, text="⬅ Voltar ao Menu", font=("Arial", 14), bg="#cccccc", command=lambda: mostrar_frame(frame_menu)).pack(pady=10)
 
-# Estoque
-label_estoque = tk.Label(janela, text="", font=("Arial", 13), bg="#f2f2f2", justify="left")
-label_estoque.pack(pady=5)
+# ==========================
+# TELA DE RELATÓRIO
+# ==========================
+tk.Label(frame_relatorio, text="💰 Relatório de Vendas", font=("Arial", 22, "bold"), bg="#ff9999").pack(pady=10)
+text_relatorio = tk.Text(frame_relatorio, height=20, width=85, font=("Arial", 12))
+text_relatorio.pack(pady=5)
+tk.Button(frame_relatorio, text="⬅ Voltar ao Menu", font=("Arial", 14), bg="#cccccc", command=lambda: mostrar_frame(frame_menu)).pack(pady=10)
 
-# Marmitas possíveis
-label_marmitas = tk.Label(janela, text="", font=("Arial", 14, "bold"), bg="#f2f2f2")
-label_marmitas.pack(pady=5)
-
-# Seleção de tamanho
-frame_tamanho = tk.Frame(janela, bg="#f2f2f2")
-frame_tamanho.pack(pady=10)
-tk.Label(frame_tamanho, text="Escolha o tamanho da marmita:", font=("Arial", 13, "bold"), bg="#f2f2f2").grid(row=0, column=0, columnspan=3)
-
-var_tamanho = tk.StringVar(value="P")
-tk.Radiobutton(frame_tamanho, text="Pequena (P)", variable=var_tamanho, value="P", font=("Arial", 12), bg="#f2f2f2").grid(row=1, column=0, padx=10)
-tk.Radiobutton(frame_tamanho, text="Média (M)", variable=var_tamanho, value="M", font=("Arial", 12), bg="#f2f2f2").grid(row=1, column=1, padx=10)
-tk.Radiobutton(frame_tamanho, text="Grande (G)", variable=var_tamanho, value="G", font=("Arial", 12), bg="#f2f2f2").grid(row=1, column=2, padx=10)
-
-# Opções extras
-frame_extra = tk.Frame(janela, bg="#f2f2f2")
-frame_extra.pack(pady=10)
-var_bebida = tk.BooleanVar()
-var_sobremesa = tk.BooleanVar()
-tk.Checkbutton(frame_extra, text="Incluir Bebida 🥤", variable=var_bebida, font=("Arial", 12), bg="#f2f2f2").pack(side="left", padx=15)
-tk.Checkbutton(frame_extra, text="Incluir Sobremesa 🍰", variable=var_sobremesa, font=("Arial", 12), bg="#f2f2f2").pack(side="left", padx=15)
-
-# Botão de venda
-btn_vender = tk.Button(janela, text="🍛 Fazer Marmita", font=("Arial", 14), bg="#4CAF50", fg="white", command=vender_marmita)
-btn_vender.pack(pady=10)
-
-# Frame de reposição
-frame_repor = tk.Frame(janela, bg="#f2f2f2")
-frame_repor.pack(pady=15)
-
-tk.Label(frame_repor, text="Reposição de Estoque", font=("Arial", 14, "bold"), bg="#f2f2f2").grid(row=0, column=0, columnspan=2, pady=5)
-tk.Label(frame_repor, text="Item:", font=("Arial", 12), bg="#f2f2f2").grid(row=1, column=0, sticky="e", padx=5)
-entry_insumo = tk.Entry(frame_repor, font=("Arial", 12))
-entry_insumo.grid(row=1, column=1, padx=5)
-
-tk.Label(frame_repor, text="Quantidade:", font=("Arial", 12), bg="#f2f2f2").grid(row=2, column=0, sticky="e", padx=5)
-entry_quantidade = tk.Entry(frame_repor, font=("Arial", 12))
-entry_quantidade.grid(row=2, column=1, padx=5)
-
-btn_repor = tk.Button(frame_repor, text="Repor Estoque", font=("Arial", 12), bg="#2196F3", fg="white", command=repor_insumo)
-btn_repor.grid(row=3, column=0, columnspan=2, pady=10)
-
-# Relatório
-label_relatorio = tk.Label(janela, text="", font=("Arial", 12), bg="#f2f2f2", justify="left")
-label_relatorio.pack(pady=10)
-
-# Atualizar interface inicial
-atualizar_interface()
-
-# Iniciar janela
-janela.mainloop()
+# ==========================
+# INICIA APLICAÇÃO
+# ==========================
+mostrar_frame(frame_menu)
+root.mainloop()
