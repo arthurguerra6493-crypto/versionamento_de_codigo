@@ -1,0 +1,8 @@
+=== Relatório de Vendas ===
+Vendas realizadas: 1
+Faturamento total: R$ 25.00
+Custo total dos insumos: R$ 0.13
+Lucro líquido: R$ 24.87
+
+Detalhes das vendas:
+Marmita: G, Bebida: Suco, Sobremesa: Brownie, Valor: R$ 25.00, Lucro: R$ 24.87
