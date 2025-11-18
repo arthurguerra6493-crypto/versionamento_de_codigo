@@ -143,8 +143,8 @@ def mostrar_relatorio():
 # ==========================
 root = tk.Tk()
 root.title("🍱 Sistema de Marmitex")
-root.geometry("1000x1000")
-root.configure(bg="#30ee17")
+root.geometry("1240x800")
+root.configure(bg="#000000")
 
 frame_menu = tk.Frame(root, bg="#1132f0")
 frame_venda = tk.Frame(root, bg="#ccffcc")
@@ -160,19 +160,19 @@ def mostrar_frame(frame):
 # ==========================
 # MENU PRINCIPAL
 # ==========================
-tk.Label(frame_menu, text="🍴 Controle de Marmitex", font=("Arial", 28, "bold"), bg="#ffcc99").pack(pady=30)
+tk.Label(frame_menu, text="🍴 Controle de Marmitex", font=("Arial", 28, "bold"), bg="#ffcc99").pack(pady=60)
 tk.Button(frame_menu, text="🛒 Fazer Venda", font=("Arial", 16), width=20, bg="#99ff99",
-          command=lambda: mostrar_frame(frame_venda)).pack(pady=15)
+          command=lambda: mostrar_frame(frame_venda)).pack(pady=32)
 tk.Button(frame_menu, text="📦 Estoque / Reposição", font=("Arial", 16), width=20, bg="#99ccff",
-          command=lambda: [mostrar_frame(frame_estoque), mostrar_estoque()]).pack(pady=15)
+          command=lambda: [mostrar_frame(frame_estoque), mostrar_estoque()]).pack(pady=30)
 tk.Button(frame_menu, text="💰 Relatório / Lucro", font=("Arial", 16), width=20, bg="#ff9999",
-          command=lambda: [mostrar_frame(frame_relatorio), mostrar_relatorio()]).pack(pady=15)
-tk.Button(frame_menu, text="❌ Sair", font=("Arial", 16), width=20, bg="#cccccc", command=root.quit).pack(pady=15)
+          command=lambda: [mostrar_frame(frame_relatorio), mostrar_relatorio()]).pack(pady=30)
+tk.Button(frame_menu, text="❌ Sair", font=("Arial", 16), width=20, bg="#cccccc", command=root.quit).pack(pady=30)
 
 # ==========================
 # TELA DE VENDAS
 # ==========================
-tk.Label(frame_venda, text="🛒 Realizar Venda", font=("Arial", 22, "bold"), bg="#ccffcc").pack(pady=15)
+tk.Label(frame_venda, text="🛒 Realizar Venda", font=("Arial", 22, "bold"), bg="#ccffcc").pack(pady=30)
 tk.Label(frame_venda, text="Tamanho da Marmita:", font=("Arial", 14), bg="#ccffcc").pack()
 combo_marmita = ttk.Combobox(frame_venda, values=["P", "M", "G"], state="readonly", font=("Arial", 12))
 combo_marmita.pack(pady=5)
@@ -185,15 +185,15 @@ tk.Label(frame_venda, text="Sobremesa:", font=("Arial", 14), bg="#ccffcc").pack(
 combo_sobremesas = ttk.Combobox(frame_venda, values=list(estoque_sobremesas.keys()), state="readonly", font=("Arial", 12))
 combo_sobremesas.pack(pady=5)
 
-tk.Button(frame_venda, text="💳 Finalizar Venda", font=("Arial", 14), bg="#66ff66", command=fazer_venda).pack(pady=15)
-tk.Button(frame_venda, text="⬅ Voltar ao Menu", font=("Arial", 14), bg="#cccccc", command=lambda: mostrar_frame(frame_menu)).pack(pady=10)
+tk.Button(frame_venda, text="💳 Finalizar Venda", font=("Arial", 14), bg="#66ff66", command=fazer_venda).pack(pady=30)
+tk.Button(frame_venda, text="⬅ Voltar ao Menu", font=("Arial", 14), bg="#cccccc", command=lambda: mostrar_frame(frame_menu)).pack(pady=20)
 
 # ==========================
 # TELA DE ESTOQUE
 # ==========================
-tk.Label(frame_estoque, text="📦 Estoque e Reposição", font=("Arial", 22, "bold"), bg="#99ccff").pack(pady=10)
+tk.Label(frame_estoque, text="📦 Estoque e Reposição", font=("Arial", 22, "bold"), bg="#99ccff").pack(pady=20)
 text_estoque = tk.Text(frame_estoque, height=15, width=85, font=("Arial", 12))
-text_estoque.pack(pady=5)
+text_estoque.pack(pady=10)
 
 tk.Label(frame_estoque, text="Item para repor:", font=("Arial", 14), bg="#99ccff").pack()
 entry_item = tk.Entry(frame_estoque, font=("Arial", 12))
@@ -202,15 +202,15 @@ tk.Label(frame_estoque, text="Quantidade:", font=("Arial", 14), bg="#99ccff").pa
 entry_qtd = tk.Entry(frame_estoque, font=("Arial", 12))
 entry_qtd.pack(pady=2)
 tk.Button(frame_estoque, text="Repor Estoque", font=("Arial", 14), bg="#66ccff", command=repor_estoque).pack(pady=5)
-tk.Button(frame_estoque, text="⬅ Voltar ao Menu", font=("Arial", 14), bg="#cccccc", command=lambda: mostrar_frame(frame_menu)).pack(pady=10)
+tk.Button(frame_estoque, text="⬅ Voltar ao Menu", font=("Arial", 14), bg="#cccccc", command=lambda: mostrar_frame(frame_menu)).pack(pady=20)
 
 # ==========================
 # TELA DE RELATÓRIO
 # ==========================
 tk.Label(frame_relatorio, text="💰 Relatório de Vendas", font=("Arial", 22, "bold"), bg="#ff9999").pack(pady=10)
-text_relatorio = tk.Text(frame_relatorio, height=20, width=85, font=("Arial", 12))
+text_relatorio = tk.Text(frame_relatorio, height=50, width=225, font=("Arial", 12))
 text_relatorio.pack(pady=5)
-tk.Button(frame_relatorio, text="⬅ Voltar ao Menu", font=("Arial", 14), bg="#cccccc", command=lambda: mostrar_frame(frame_menu)).pack(pady=10)
+tk.Button(frame_relatorio, text="⬅ Voltar ao Menu", font=("Arial", 14), bg="#cccccc", command=lambda: mostrar_frame(frame_menu)).pack(pady=20)
 
 # ==========================
 # INICIA APLICAÇÃO
